@@ -1,6 +1,6 @@
 ﻿namespace Physics.Math
 {
-    internal class Matrix2x2
+    public class Matrix2x2
     {
         public readonly Vec2D Col1;
         public readonly Vec2D Col2;

@@ -37,7 +37,7 @@ namespace Graphic
             _vertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(_vertexArrayObject);
 
-            _shader = new Shader("Shaders/SolidQuad/shader.vert", "Shaders/SolidQuad/shader.frag");
+            _shader = new Shader("Graphic/Shaders/SolidQuad/shader.vert", "Graphic/Shaders/SolidQuad/shader.frag");
             _shader.Use();
 
             var vertexLocation = _shader.GetAttribLocation("aPosition");
