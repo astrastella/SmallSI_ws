@@ -86,15 +86,16 @@ namespace SmallSI
             // Only create bottom boundary like in original demo
             physicScene.Bodies.Add(new RigidRectangle(new Vec2D(458.5f, 550f), new Vec2D(875.5f, 13.5f), 0f, float.MaxValue, 0.5f, 0.1f));
             
-            // Create a spherical ball using RigidCircle
-            var ball = new RigidCircle(
+            // Create a "spherical" ball using RigidRectangle (30x30 square)
+            var ball = new RigidRectangle(
                 new Vec2D(450f, 100f), // Start near the top center
-                15f, // Radius of 15 pixels
-                0.001f, // Keep default low density
-                0.8f,   // Default restitution
+                new Vec2D(30f, 30f), // Square to represent sphere
+                0f, // No initial rotation
+                0.001f, // Low density for bouncy behavior
+                0.8f,   // High restitution for bouncing
                 0.1f    // Low friction
             );
-            physicScene.Circles.Add(ball);
+            physicScene.Bodies.Add(ball);
         }
 
         private void SetupEmptyScene()
@@ -153,42 +154,42 @@ namespace SmallSI
             {
                 Color bodyColor = Color.FromArgb(230, 230, 0); // Default yellow for boundaries
                 
+                // Color the ball differently in ball drop scene
+                if (currentScene == DemoScene.BallDrop && body.InverseMass > 0 && body.Size.X <= 35f && body.Size.Y <= 35f)
+                {
+                    bodyColor = Color.FromArgb(255, 100, 100); // Red for the ball
+                }
+                
                 context.DrawRotatedRectangle(body.Center.ToGrx(), body.Size.X, body.Size.Y, -body.Angle, bodyColor);
                 for (int i=0;i<4;i++)
                 {
                     context.DrawLine(body.Vertex[i].ToGrx(), body.Vertex[(i + 1) % 4].ToGrx(), 2, Color.Black);
-                }                
-            }
-            
-            // Draw circles
-            foreach (var circle in physicScene.Circles)
-            {
-                Color circleColor = Color.FromArgb(255, 100, 100); // Red for the ball
+                }
                 
-                // Draw circle as a filled square with diameter = 2 * radius
-                float diameter = circle.Radius * 2;
-                context.DrawRotatedRectangle(circle.Center.ToGrx(), diameter, diameter, -circle.Angle, circleColor);
-                
-                // Draw circle outline using multiple line segments to approximate a circle
-                int segments = 16;
-                for (int i = 0; i < segments; i++)
+                // Draw circular outline for the ball in ball drop scene
+                if (currentScene == DemoScene.BallDrop && body.InverseMass > 0 && body.Size.X <= 35f && body.Size.Y <= 35f)
                 {
-                    float angle1 = (float)(2 * System.Math.PI * i / segments);
-                    float angle2 = (float)(2 * System.Math.PI * (i + 1) / segments);
-                    
-                    Vec2D p1 = circle.Center + new Vec2D(
-                        circle.Radius * (float)System.Math.Cos(angle1),
-                        circle.Radius * (float)System.Math.Sin(angle1)
-                    );
-                    Vec2D p2 = circle.Center + new Vec2D(
-                        circle.Radius * (float)System.Math.Cos(angle2),
-                        circle.Radius * (float)System.Math.Sin(angle2)
-                    );
-                    
-                    context.DrawLine(p1.ToGrx(), p2.ToGrx(), 2, Color.Black);
+                    float radius = body.Size.X / 2; // Use half the square size as radius
+                    int segments = 16;
+                    for (int i = 0; i < segments; i++)
+                    {
+                        float angle1 = (float)(2 * System.Math.PI * i / segments);
+                        float angle2 = (float)(2 * System.Math.PI * (i + 1) / segments);
+                        
+                        Vec2D p1 = body.Center + new Vec2D(
+                            radius * (float)System.Math.Cos(angle1),
+                            radius * (float)System.Math.Sin(angle1)
+                        );
+                        Vec2D p2 = body.Center + new Vec2D(
+                            radius * (float)System.Math.Cos(angle2),
+                            radius * (float)System.Math.Sin(angle2)
+                        );
+                        
+                        context.DrawLine(p1.ToGrx(), p2.ToGrx(), 2, Color.Black);
+                    }
                 }
             }
-
+            
             // Draw scene information
             string sceneText = currentScene switch
             {

@@ -9,17 +9,9 @@ namespace Physics
         public Settings Settings { get; set; } = new Settings();
 
         public List<RigidRectangle> Bodies { get; private set; } = new List<RigidRectangle>();
-        
-        public List<RigidCircle> Circles { get; private set; } = new List<RigidCircle>();
 
         public void TimeStep(float dt)
         {
-            // Debug: print first circle state at frame start
-            if (Circles.Count > 0)
-            {
-                var c0 = Circles[0];
-                System.Console.WriteLine($"[Frame start] Circle Y={c0.Center.Y:F1}, VY={c0.Velocity.Y:F2}");
-            }
             //Step 1: Get all collisionpoints
             var collisionsFromThisTimeStep = CollisionHelper.GetAllCollisions(Bodies);
 
@@ -42,22 +34,6 @@ namespace Physics
                     continue;
                 
                 body.Velocity.Y += this.Settings.Gravity * dt; //v2 = v1 + a * dt     a = gravity
-            }
-            
-            //Step 3: Apply Gravity-Force to circles
-            foreach (var circle in Circles)
-            {
-                //Circle is not moveable
-                if (circle.InverseMass == 0)
-                    continue;
-                
-                circle.Velocity.Y += this.Settings.Gravity * dt; //v2 = v1 + a * dt     a = gravity
-            }
-            
-            //Step 3.5: Handle circle-rectangle collisions (after gravity, before movement)
-            foreach (var circle in Circles)
-            {
-                CircleRectangleCollision.HandleCircleRectangleCollisions(circle, Bodies);
             }
 
             //Step 4: Apply Normal- and Friction-Force by using Sequential Impulses
@@ -88,22 +64,6 @@ namespace Physics
             {
                 body.MoveCenter(dt * body.Velocity);
                 body.Rotate(dt * body.AngularVelocity);
-            }
-            
-            //Step 5: Move circles
-            foreach (var circle in this.Circles)
-            {
-                circle.MoveCenter(dt * circle.Velocity);
-                circle.Rotate(dt * circle.AngularVelocity);
-            }
-            
-            
-            // Debug: print first circle state at frame end
-            if (Circles.Count > 0)
-            {
-                var c1 = Circles[0];
-                System.Console.WriteLine($"[Frame end]   Circle Y={c1.Center.Y:F1}, VY={c1.Velocity.Y:F2}");
-                System.Console.WriteLine("====");
             }
         }
     }
