@@ -1,4 +1,4 @@
-﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System.Drawing;
 
@@ -37,7 +37,7 @@ namespace Graphic
             _vertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(_vertexArrayObject);
 
-            _shader = new Shader("Shaders/SolidQuad/shader.vert", "Shaders/SolidQuad/shader.frag");
+            _shader = new Shader("Graphic/Shaders/SolidQuad/shader.vert", "Graphic/Shaders/SolidQuad/shader.frag");
             _shader.Use();
 
             var vertexLocation = _shader.GetAttribLocation("aPosition");
@@ -93,6 +93,24 @@ namespace Graphic
             _shader.SetVector4("color", new Vector4(color.R / 255f, color.G / 255f, color.B / 255, color.A / 255f));
 
             GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
+        }
+
+        public void DrawCircle(Vector2 center, float radius, Color color)
+        {
+            // Draw circle as multiple small rectangles arranged in a circle
+            int segments = 16;
+            float angleStep = (float)(2 * Math.PI / segments);
+            float segmentWidth = (float)(2 * Math.PI * radius / segments);
+            float segmentHeight = radius * 0.3f;
+
+            for (int i = 0; i < segments; i++)
+            {
+                float angle = i * angleStep;
+                float x = center.X + (float)Math.Cos(angle) * radius * 0.85f;
+                float y = center.Y + (float)Math.Sin(angle) * radius * 0.85f;
+                
+                DrawRotatedRectangle(new Vector2(x, y), segmentWidth, segmentHeight, angle + (float)Math.PI/2, color);
+            }
         }
 
         public void DrawLine(Vector2 p1, Vector2 p2, float lineWidth, Color color)

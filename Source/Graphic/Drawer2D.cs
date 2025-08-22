@@ -1,4 +1,4 @@
-﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System.Drawing;
 
@@ -33,6 +33,11 @@ namespace Graphic
         public void DrawRotatedRectangle(Vector2 center, float width, float height, float angle, Color color)
         {
             this.solidQuadDrawer.DrawRotatedRectangle(center, width, height, angle, color);
+        }
+
+        public void DrawCircle(Vector2 center, float radius, Color color)
+        {
+            this.solidQuadDrawer.DrawCircle(center, radius, color);
         }
 
         public void SwapBuffer()

@@ -1,4 +1,4 @@
-﻿using Physics.CollisionDetection;
+using Physics.CollisionDetection;
 using Physics.CollisionResolution;
 using Physics.Math;
 
@@ -8,7 +8,7 @@ namespace Physics
     {
         public Settings Settings { get; set; } = new Settings();
 
-        public List<RigidRectangle> Bodies { get; private set; } = new List<RigidRectangle>();
+        public List<IRigidBody> Bodies { get; private set; } = new List<IRigidBody>();
 
         public void TimeStep(float dt)
         {
