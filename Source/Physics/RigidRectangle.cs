@@ -1,8 +1,8 @@
-using Physics.Math;
+﻿using Physics.Math;
 
 namespace Physics
 {
-    public class RigidRectangle : IRigidBody
+    public class RigidRectangle
     {
         public Vec2D Size { get; private set; }
 

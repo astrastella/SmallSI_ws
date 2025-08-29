@@ -1,4 +1,4 @@
-using Physics.CollisionDetection;
+﻿using Physics.CollisionDetection;
 using Physics.Math;
 
 namespace Physics.CollisionResolution
@@ -12,7 +12,7 @@ namespace Physics.CollisionResolution
             return start + end;
         }
 
-        public static Vec2D GetRelativeVelocityBetweenAnchorPoints(IRigidBody b1, IRigidBody b2, Vec2D r1, Vec2D r2)
+        public static Vec2D GetRelativeVelocityBetweenAnchorPoints(RigidRectangle b1, RigidRectangle b2, Vec2D r1, Vec2D r2)
         {
             Vec2D v1 =b1.Velocity + new Vec2D(-b1.AngularVelocity * r1.Y, b1.AngularVelocity * r1.X);
             Vec2D v2 =b2.Velocity + new Vec2D(-b2.AngularVelocity * r2.Y, b2.AngularVelocity * r2.X);

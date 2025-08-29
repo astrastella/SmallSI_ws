@@ -1,8 +1,8 @@
-namespace Physics.CollisionDetection
+﻿namespace Physics.CollisionDetection
 {
     internal static class CollisionHelper
     {
-        public static CollisionInfo[] GetAllCollisions(List<IRigidBody> bodies)
+        public static CollisionInfo[] GetAllCollisions(List<RigidRectangle> bodies)
         {
             List<CollisionInfo> collisions = new List<CollisionInfo>();
 
@@ -15,7 +15,7 @@ namespace Physics.CollisionDetection
 
                     if (BoundingCircleCollides(b1, b2))   //Broudphase-Test
                     {
-                        var contacts = GetCollisionPoints(b1, b2); //Nearphase-Test
+                        var contacts = RectangleRectangleCollision.GetCollisionPoints(b1, b2); //Nearphase-Test
                         if (contacts.Any())
                             collisions.AddRange(contacts);
                     }
@@ -24,32 +24,7 @@ namespace Physics.CollisionDetection
             return collisions.ToArray();
         }
 
-        private static CollisionInfo[] GetCollisionPoints(IRigidBody b1, IRigidBody b2)
-        {
-            // Determine collision type based on body types
-            if (b1 is RigidRectangle rect1 && b2 is RigidRectangle rect2)
-            {
-                return RectangleRectangleCollision.GetCollisionPoints(rect1, rect2);
-            }
-            else if (b1 is RigidCircle circle1 && b2 is RigidCircle circle2)
-            {
-                return CircleCircleCollision.GetCollisionPoints(circle1, circle2);
-            }
-            else if (b1 is RigidCircle circle && b2 is RigidRectangle rectangle)
-            {
-                return CircleRectangleCollision.GetCollisionPoints(circle, rectangle);
-            }
-            else if (b1 is RigidRectangle rectangle2 && b2 is RigidCircle circle3)
-            {
-                // Swap order and flip normal
-                var contacts = CircleRectangleCollision.GetCollisionPoints(circle3, rectangle2);
-                return contacts.Select(c => new CollisionInfo(c.Start, -c.Normal, c.Depth, b1, b2)).ToArray();
-            }
-
-            return new CollisionInfo[0];
-        }
-
-        internal static bool BoundingCircleCollides(IRigidBody c1, IRigidBody c2)
+        internal static bool BoundingCircleCollides(RigidRectangle c1, RigidRectangle c2)
         {
             float d = (c1.Center - c2.Center).Length();
             return d < (c1.Radius + c2.Radius);
