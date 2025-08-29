@@ -2,7 +2,7 @@
 
 namespace Physics
 {
-    public class RigidRectangle
+    public class RigidRectangle : IRigidBody
     {
         public Vec2D Size { get; private set; }
 

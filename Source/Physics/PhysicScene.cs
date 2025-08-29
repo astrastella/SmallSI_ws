@@ -1,6 +1,7 @@
 ﻿using Physics.CollisionDetection;
 using Physics.CollisionResolution;
 using Physics.Math;
+using System.Linq;
 
 namespace Physics
 {
@@ -8,12 +9,13 @@ namespace Physics
     {
         public Settings Settings { get; set; } = new Settings();
 
-        public List<RigidRectangle> Bodies { get; private set; } = new List<RigidRectangle>();
+        public List<IRigidBody> Bodies { get; private set; } = new List<IRigidBody>();
 
         public void TimeStep(float dt)
         {
             //Step 1: Get all collisionpoints
             var collisionsFromThisTimeStep = CollisionHelper.GetAllCollisions(Bodies);
+
 
             //Step 2: Create Constraints
             this.Settings.Dt = dt;
@@ -49,6 +51,7 @@ namespace Physics
                     c.AccumulatedImpulse = ResolutionHelper.Clamp(oldSum + impulse, c.MinImpulse, c.MaxImpulse);
                     impulse = c.AccumulatedImpulse - oldSum;
 
+
                     //Apply Impulse -> correct the velocity from B1 and B2
                     Vec2D impulseVec = impulse * c.ForceDirection;
                     c.B1.Velocity -= impulseVec * c.B1.InverseMass;
@@ -57,6 +60,7 @@ namespace Physics
                     c.B2.AngularVelocity += Vec2D.ZValueFromCross(c.R2, impulseVec) * c.B2.InverseInertia;
                 }
             }
+
 
             //Step 5: Move bodies
             foreach (var body in this.Bodies)

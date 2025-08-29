@@ -4,8 +4,8 @@ namespace Physics.CollisionResolution
 {
     internal interface IConstraint
     {
-        RigidRectangle B1 { get; }
-        RigidRectangle B2 { get; }
+        IRigidBody B1 { get; }
+        IRigidBody B2 { get; }
         Vec2D R1 { get; } //Lever arm from B1.Center to contact point
         Vec2D R2 { get; } //Lever arm from B2.Center to contact point
         float MinImpulse { get; }

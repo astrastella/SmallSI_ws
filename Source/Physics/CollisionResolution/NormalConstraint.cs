@@ -5,8 +5,8 @@ namespace Physics.CollisionResolution
 {
     internal class NormalConstraint : IConstraint
     {
-        public RigidRectangle B1 { get; }
-        public RigidRectangle B2 { get; }
+        public IRigidBody B1 { get; }
+        public IRigidBody B2 { get; }
         public Vec2D R1 { get; } //Lever arm from B1.Center to contact point
         public Vec2D R2 { get; } //Lever arm from B2.Center to contact point
         public float MinImpulse { get; } = 0;

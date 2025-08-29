@@ -35,6 +35,11 @@ namespace Graphic
             this.solidQuadDrawer.DrawRotatedRectangle(center, width, height, angle, color);
         }
 
+        public void DrawCircle(Vector2 center, float radius, Color color)
+        {
+            this.solidQuadDrawer.DrawCircle(center, radius, color);
+        }
+
         public void SwapBuffer()
         {
             this.swapBufferAction();

@@ -104,5 +104,32 @@ namespace Graphic
 
             DrawRotatedRectangle(center, length, lineWidth, angle, color);
         }
+
+        public void DrawCircle(Vector2 center, float radius, Color color)
+        {
+            // Draw circle as concentric rings of small rectangles for solid appearance
+            int rings = 8; // Number of concentric rings
+            int segmentsPerRing = 32; // Segments per ring (will increase for outer rings)
+            
+            for (int ring = 0; ring < rings; ring++)
+            {
+                float ringRadius = radius * (ring + 1) / rings; // Radius of this ring
+                int segments = segmentsPerRing + ring * 8; // More segments for outer rings
+                float angleStep = (float)(2 * Math.PI / segments);
+                float rectSize = (float)(2 * Math.PI * ringRadius / segments * 1.2); // Slightly larger for overlap
+                
+                for (int i = 0; i < segments; i++)
+                {
+                    float angle = i * angleStep;
+                    Vector2 position = center + new Vector2(
+                        (float)(Math.Cos(angle) * ringRadius),
+                        (float)(Math.Sin(angle) * ringRadius)
+                    );
+                    
+                    // Draw small rectangle at this position
+                    DrawRotatedRectangle(position, rectSize, rectSize, angle, color);
+                }
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace Graphic
         void DrawAxialRectangle(RectangleF rec, Color color);
         void DrawRotatedRectangle(Vector2 center, float width, float height, float angle, Color color);
         void DrawLine(Vector2 p1, Vector2 p2, float lineWidth, Color color);
+        void DrawCircle(Vector2 center, float radius, Color color);
         void SwapBuffer();
     }
 }
